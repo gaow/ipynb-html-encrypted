@@ -16,3 +16,14 @@ You need to install
 
 ## Usage
 
+### English version
+
+```
+./encrypt.sos --notebook test_page.ipynb --password Cyoa93
+```
+
+### Chinese version
+
+```
+./encrypt.sos --notebook test_page.ipynb --password Cyoa93 --tpl password_template_chs.html --title "样例文档"
+```

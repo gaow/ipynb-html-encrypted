@@ -1,0 +1,22 @@
+#!/usr/bin/env sos-runner
+#fileformat=SOS1.0
+
+[global]
+parameter: notebook = path()
+parameter: tpl = path()
+parameter: title = "staticrypt protected page"
+parameter: password = ''
+fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
+fail_if(len(password) < 2, msg = 'You need a password longer than 2 letters!')
+
+[default_1]
+input: notebook
+output: f"{_input:n}.original.html"
+bash: expand = True
+  sos convert {_input} {_output} --template sos-cm-toc
+
+[default_2]
+output: f"{_input:nn}.html"
+bash: expand = True, container="gaow/staticrypt"
+  staticrypt {_input} {password} -o {_output} -t {title} {("-f " + str(tpl)) if tpl.is_file() else ""}
+_input.zap()
