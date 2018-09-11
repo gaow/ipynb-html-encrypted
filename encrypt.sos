@@ -2,21 +2,33 @@
 #fileformat=SOS1.0
 
 [global]
+# Path to notebook file (required)
 parameter: notebook = path()
-parameter: tpl = path()
-parameter: title = "staticrypt protected page"
+# Set password. If unspecified a random password
+# will be generated, reported and used.
 parameter: password = ''
+# Path to login page template
+parameter: tpl = path()
+# Login page title
+parameter: title = "staticrypt protected page"
 fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
-fail_if(len(password) < 2, msg = 'You need a password longer than 2 letters!')
 
+# Convert notebook to HTML
 [default_1]
 input: notebook
 output: f"{_input:n}.original.html"
-bash: expand = True
+bash: expand = True, stderr = False
   sos convert {_input} {_output} --template sos-cm-toc
 
+# Encypt HTML
 [default_2]
+import string, random
+def pw_gen(size = 8, chars=string.ascii_letters + string.digits):
+  return ''.join(random.choice(chars) for _ in range(size))
+if len(password) == 0:
+  password = pw_gen()
+  print(f"\t\033[1;4mPassword set to: {password}\033[0m")
+
 output: f"{_input:nn}.html"
 bash: expand = True, container="gaow/staticrypt"
-  staticrypt {_input} {password} -o {_output} -t {title} {("-f " + str(tpl)) if tpl.is_file() else ""}
-_input.zap()
+  staticrypt {_input} {password} -o {_output} -t "{title}" {("-f " + str(tpl)) if tpl.is_file() else ""}

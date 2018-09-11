@@ -16,27 +16,45 @@ You need to install
 
 ## Usage
 
+```
+./encrypt.sos -h
+
+Global Workflow Options:
+  --notebook . (as path)
+                        Path to notebook file (required)
+  --password ''
+                        Set password. If unspecified a random password will be
+                        generated, reported and used.
+  --tpl . (as path)
+                        Path to login page template
+  --title 'staticrypt protected page'
+                        Login page title
+
+Sections
+  default_1:            Convert notebook to HTML
+  default_2:            Encypt HTML
+```
+
 ### English version
 
 ```
-./encrypt.sos --notebook test_page.ipynb --password Cyoa93
+./encrypt.sos --notebook test_page.ipynb
 ```
 
 ### Chinese version
 
 ```
-./encrypt.sos --notebook test_page.ipynb --password Cyoa93 --tpl password_template_chs.html --title "样例文档"
+./encrypt.sos --notebook test_page.ipynb --tpl password_template_chs.html --title "样例文档"
 ```
 
 ## Cboice of password
 
-I suggest using random passwords, eg via the Python code below to generate 8 digits password:
+I suggest using default random passwords. You should see a password generated and printed on the screen, something like:
 
-```python
-import string, random
-
-def pw_gen(size = 8, chars=string.ascii_letters + string.digits):
-	return ''.join(random.choice(chars) for _ in range(size))
-
-print(pw_gen(8))
 ```
+	Password set to: <a random string>
+```
+
+Please keep a record of this randomly generated password for sharing with authorized readers.
+
+Alternatively you can use `--password` option to the `./encrypt.sos` command if you want to use a specified password instead.
