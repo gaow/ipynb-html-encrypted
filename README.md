@@ -27,3 +27,16 @@ You need to install
 ```
 ./encrypt.sos --notebook test_page.ipynb --password Cyoa93 --tpl password_template_chs.html --title "样例文档"
 ```
+
+## Cboice of password
+
+I suggest using random passwords, eg via the Python code below to generate 8 digits password:
+
+```python
+import string, random
+
+def pw_gen(size = 8, chars=string.ascii_letters + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))
+
+print(pw_gen(8))
+```
