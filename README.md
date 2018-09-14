@@ -23,12 +23,13 @@ Global Workflow Options:
   --notebook . (as path)
                         Path to notebook file (required)
   --password ''
-                        Set password. If unspecified a random password will be
-                        generated, reported and used.
+                        Set password. If unspecified a random password will be generated, reported and used.
   --tpl . (as path)
                         Path to login page template
   --title 'staticrypt protected page'
                         Login page title
+  --outdir ''
+                        Path to output file directory
 
 Sections
   default_1:            Convert notebook to HTML

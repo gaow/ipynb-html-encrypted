@@ -11,6 +11,8 @@ parameter: password = ''
 parameter: tpl = path()
 # Login page title
 parameter: title = "staticrypt protected page"
+# Path to output file directory
+parameter: outdir = ""
 fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 
 # Convert notebook to HTML
@@ -28,7 +30,9 @@ def pw_gen(size = 8, chars=string.ascii_letters + string.digits):
 if len(password) == 0:
   password = pw_gen()
   print(f"\t\033[1;4mPassword set to: {password}\033[0m")
+if len(outdir) == 0:
+  outdir = f'{_input:d}'
 
-output: f"{_input:nn}.html"
-bash: expand = True, container="gaow/staticrypt"
+output: f"{outdir}/{_input:bnn}.html"
+bash: expand = True, container="gaow/staticrypt", volumes = f"{outdir}:{outdir}"
   staticrypt {_input} {password} -o {_output} -t "{title}" {("-f " + str(tpl)) if tpl.is_file() else ""}
