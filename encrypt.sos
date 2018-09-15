@@ -2,7 +2,7 @@
 #fileformat=SOS1.0
 
 [global]
-# Path to notebook file (required)
+# Path to notebook or markdown file (required)
 parameter: notebook = path()
 # Set password. If unspecified a random password
 # will be generated, reported and used.
@@ -15,12 +15,14 @@ parameter: title = "staticrypt protected page"
 parameter: outdir = ""
 fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 
-# Convert notebook to HTML
+# Generate plain HTML
 [default_1]
+depends: Py_Module('ipyrmd')
 input: notebook
 output: f"{_input:n}.original.html"
-bash: expand = True, stderr = False
-  sos convert {_input} {_output} --template sos-cm-toc
+bash: expand = True, stderr = False, stdout = False
+  {("ipyrmd --to ipynb --from Rmd -y -o .sos/%s.ipynb %s" % (_input.name, _input)) if str(_input).endswith(".md") else ""}
+  sos convert {(".sos/%s.ipynb" % _input.name) if str(_input).endswith(".md") else _input} {_output} --template sos-cm-toc
 
 # Encypt HTML
 [default_2]

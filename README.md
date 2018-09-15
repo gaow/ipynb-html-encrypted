@@ -21,7 +21,7 @@ You need to install
 
 Global Workflow Options:
   --notebook . (as path)
-                        Path to notebook file (required)
+                        Path to notebook or markdown file (required)
   --password ''
                         Set password. If unspecified a random password will be generated, reported and used.
   --tpl . (as path)
@@ -32,7 +32,7 @@ Global Workflow Options:
                         Path to output file directory
 
 Sections
-  default_1:            Convert notebook to HTML
+  default_1:            Generate plain HTML
   default_2:            Encypt HTML
 ```
 
@@ -46,6 +46,14 @@ Sections
 
 ```
 ./encrypt.sos --notebook test_page.ipynb --tpl password_template_chs.html --title "样例文档"
+```
+
+### Markdown support
+
+Markdown files can also be used as input, eg,
+
+```
+./encrypt.sos --notebook README.md
 ```
 
 ## Cboice of password
