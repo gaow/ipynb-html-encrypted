@@ -36,5 +36,5 @@ if len(outdir) == 0:
   outdir = f'{_input:d}'
 
 output: f"{outdir}/{_input:bnn}.html"
-bash: expand = True, container="gaow/staticrypt", volumes = f"{outdir}:{outdir}"
+bash: expand = True, container="gaow/staticrypt", volumes = [f"{outdir}:{outdir}", f"{_input:d}:{_input:d}"]
   staticrypt {_input} {password} -o {_output} -t "{title if len(title) else _output.name[:-5]}" {("-f " + str(tpl)) if tpl.is_file() else ""}
