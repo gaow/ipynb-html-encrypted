@@ -13,13 +13,15 @@ parameter: tpl = path()
 parameter: title = ""
 # Path to output file directory
 parameter: outdir = ""
-fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
+fail_if(not notebook.resolve().exists(), msg = 'Need input parameter ``--notebook``')
 
 # Generate plain HTML
 [default_1]
 depends: Py_Module('ipyrmd')
 input: notebook
-output: f"{_input:n}.original.html"
+if len(outdir) == 0:
+  outdir = f'{_input:d}'
+output: f"{outdir}/{_input:bn}.original.html"
 bash: expand = True, stderr = False, stdout = False
   {("ipyrmd --to ipynb --from Rmd -y -o .sos/%s.ipynb %s" % (_input.name, _input)) if str(_input).endswith(".md") else ""}
   sos convert {(".sos/%s.ipynb" % _input.name) if str(_input).endswith(".md") else _input} {_output} --template sos-cm-toc
@@ -32,9 +34,7 @@ def pw_gen(size = 8, chars=string.ascii_letters + string.digits):
 if len(password) == 0:
   password = pw_gen()
   print(f"\t\033[1;4mPassword set to: {password}\033[0m")
-if len(outdir) == 0:
-  outdir = f'{_input:d}'
 
-output: f"{outdir}/{_input:bnn}.html"
-bash: expand = True, container="gaow/staticrypt", volumes = [f"{outdir}:{outdir}", f"{_input:d}:{_input:d}"]
-  staticrypt {_input} {password} -o {_output} -t "{title if len(title) else _output.name[:-5]}" {("-f " + str(tpl)) if tpl.is_file() else ""}
+output: f"{_input:nn}.html"
+bash: expand = True, container="gaow/staticrypt", volumes = f"{_input:ad}:{_input:ad}"
+  staticrypt {_input} {password} -o {_output} -t "{title if len(title) else (_output.name[:min(22, len(_output.name))][:-5] + (' ...' if len(_output.name) > 22 else ''))}" {("-f " + str(tpl)) if tpl.is_file() else ""}
