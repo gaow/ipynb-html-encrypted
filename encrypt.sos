@@ -10,7 +10,7 @@ parameter: password = ''
 # Path to login page template
 parameter: tpl = path()
 # Login page title
-parameter: title = "staticrypt protected page"
+parameter: title = ""
 # Path to output file directory
 parameter: outdir = ""
 fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
@@ -37,4 +37,4 @@ if len(outdir) == 0:
 
 output: f"{outdir}/{_input:bnn}.html"
 bash: expand = True, container="gaow/staticrypt", volumes = f"{outdir}:{outdir}"
-  staticrypt {_input} {password} -o {_output} -t "{title}" {("-f " + str(tpl)) if tpl.is_file() else ""}
+  staticrypt {_input} {password} -o {_output} -t "{title if len(title) else _output.name[:-5]}" {("-f " + str(tpl)) if tpl.is_file() else ""}

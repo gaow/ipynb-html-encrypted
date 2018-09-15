@@ -26,7 +26,7 @@ Global Workflow Options:
                         Set password. If unspecified a random password will be generated, reported and used.
   --tpl . (as path)
                         Path to login page template
-  --title 'staticrypt protected page'
+  --title ''
                         Login page title
   --outdir ''
                         Path to output file directory
